@@ -7,8 +7,15 @@ router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
 
-router.get('/me', function(req, res, next) {
-  res.send('All about me');
+router.get('/me/:email', function(req, res, next) {
+  let getEmail = req.params.email;
+
+  let sql = `SELECT * FROM users WHERE email = ?`;
+  db.query(sql, [getEmail], (err, rows) => {
+    if(err) res.json({ message: 'Ada kesalahan', result: err })
+
+    res.json({ message: 'User ditemukan', result: rows })
+  })
 });
 
 router.post('/me', function(req, res) {
